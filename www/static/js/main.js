@@ -151,5 +151,9 @@ $(function() {
 	$("#recordButton").mouseup(stopRecording);
 	$("#recordButton").mouseleave(stopRecording);
 	$("#sendTextButton").click(sendText);
+	$("#textForm").submit(function(event) {
+		sendText();
+		event.preventDefault();
+	});
 
 });

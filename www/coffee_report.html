@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>Cisco Coffee Platform Reports</title>
+    <link href="coffee_v2.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+  </head>
+  <body>
+    <span style="color:#696969;font-family:Arial;font-size:35px;"><strong>Cisco Coffee Platform (CCP) Reports</strong></span>
+    <div style="width: 512px; margin-left: auto; margin-right: auto;">
+    <div style="color:#696969;font-family:Arial;font-size:20px;">Coffees Sold: <span id="totalSales"></span>  Revenue: <span id="totalRevenue"></span></div>
+    <hr/>
+
+    
+      <h1 style="text-align: left; font-size:15px;">Employee Accounts</h1>
+      <table id="employeeAccounts">
+
+      </table>
+      <hr/>
+      <h1 style="text-align: left; font-size:15px;">Recent Orders</h1>
+      <table id="recentOrders">
+
+      </table>
+      <div><span id="totalSales"></span> <span id="totalRevenue"></span></div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script lang="javascript">
+        function updateWithData(data) {
+          $("#totalSales").text(data["totalsales"]);
+          $("#totalRevenue").text("$"+data["totalrevenue"]);
+
+          $("#employeeAccounts").html("<tr><th>EmployeeID</th><th>Name</th><th>Balance</th></tr>");
+          for (i in data["employeeaccounts"]) {
+            account = data["employeeaccounts"][i];
+            $("#employeeAccounts").append("<tr><td>"+account["employeeId"]+"</td><td>"+account["name"]+"</td><td>$"+account["balance"]+"</td></tr>");
+          }
+
+          $("#recentOrders").html("<tr><th>Coffee</th><th>Quantity</th><th>Total Amount</th></tr>");
+          for (i in data["recentsales"]) {
+            order = data["recentsales"][i];
+            $("#recentOrders").append("<tr><td>"+order["coffeetype"]+"</td><td>"+order["coffeeqty"]+"</td><td>$"+order["amount"]+"</td></tr>");
+          }
+        }
+        function update() {
+
+          $.get('report')
+          .done(function(data) {
+            console.log(data);
+            updateWithData(data);
+          })
+          .fail(function(data) {
+            data={"totalsales":19,"totalrevenue":42.5,"recentsales":[{"coffeetype":"latte","coffeeqty":1,"employeeId":"","amount":3.5},{"coffeetype":"latte","coffeeqty":1,"employeeId":"","amount":3.5},{"coffeetype":"latte","coffeeqty":1,"employeeId":"","amount":3.5},{"coffeetype":"latte","coffeeqty":1,"employeeId":"","amount":3.5},{"coffeetype":"espresso","coffeeqty":1,"employeeId":"","amount":3}],"employeeaccounts":[{"employeeId":"123","balance":2.5,"name":""}]};
+            updateWithData(data);
+          })
+          .always(function(data) {
+            setTimeout(update, 1000);
+          });
+
+        }
+    
+        $(function() {
+          console.log( "ready!" );
+          update();
+        });
+    </script>
+
+
+  </body>
+</html>
