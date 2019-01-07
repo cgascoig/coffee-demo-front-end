@@ -11,10 +11,8 @@ action "Login" {
 action "Build" {
   uses = "actions/docker/cli@76ff57a"
   needs = ["Login"]
-  args = "build -t cgascoig/coffee-demo-front-end ."
+  args = "build -t cgascoig/coffee-demo-front-end:${GITHUB_SHA} ."
 }
-
-
 
 action "Push" {
   uses = "actions/docker/cli@76ff57a"
