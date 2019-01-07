@@ -150,7 +150,7 @@ $(function() {
 	$("#recordButton").mousedown(startRecording);
 	$("#recordButton").mouseup(stopRecording);
 	$("#recordButton").mouseleave(stopRecording);
-	$("#sendTextButton").click(sendText);
+	// $("#sendTextButton").click(sendText);
 	$("#textForm").submit(function(event) {
 		sendText();
 		event.preventDefault();
