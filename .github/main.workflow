@@ -19,5 +19,5 @@ action "Build" {
 action "Push" {
   uses = "actions/docker/cli@76ff57a"
   needs = ["Build"]
-  args = "push"
+  args = "push cgascoig/coffee-demo-front-end"
 }
