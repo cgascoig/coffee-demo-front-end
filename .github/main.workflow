@@ -1,6 +1,10 @@
 workflow "New workflow" {
   on = "push"
-  resolves = ["Push"]
+  resolves = [
+    "Push complete message",
+    "Build complete message",
+    "New push message",
+  ]
 }
 
 action "Login" {
@@ -18,4 +22,24 @@ action "Push" {
   uses = "actions/docker/cli@76ff57a"
   needs = ["Build"]
   args = "push cgascoig/coffee-demo-front-end:${GITHUB_SHA}"
+}
+
+action "New push message" {
+  uses = "cgascoig/actions/webexteams@master"
+  secrets = ["WEBEX_TEAMS_ACCESS_TOKEN"]
+  args = "--room Chris Gascoigne --message New push event"
+}
+
+action "Build complete message" {
+  uses = "cgascoig/actions/webexteams@master"
+  needs = ["Build"]
+  secrets = ["WEBEX_TEAMS_ACCESS_TOKEN"]
+  args = "--room Chris Gascoigne --message Docker image built"
+}
+
+action "Push complete message" {
+  uses = "cgascoig/actions/webexteams@master"
+  needs = ["Push"]
+  args = "--room Chris Gascoigne --message Docker image pushed to registry"
+  secrets = ["WEBEX_TEAMS_ACCESS_TOKEN"]
 }
