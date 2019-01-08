@@ -2,14 +2,13 @@ workflow "New workflow" {
   on = "push"
   resolves = [
     "Push complete message",
-    "Build complete message",
-    "New push message",
   ]
 }
 
 action "Login" {
   uses = "actions/docker/login@76ff57a"
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
+  needs = ["New push message"]
 }
 
 action "Build" {
@@ -20,7 +19,7 @@ action "Build" {
 
 action "Push" {
   uses = "actions/docker/cli@76ff57a"
-  needs = ["Build"]
+  needs = ["Build complete message"]
   args = "push cgascoig/coffee-demo-front-end:${GITHUB_SHA}"
 }
 
